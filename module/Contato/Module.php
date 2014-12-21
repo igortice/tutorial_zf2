@@ -12,6 +12,8 @@ use Contato\Model\Contato,
 use Zend\Db\ResultSet\ResultSet,
     Zend\Db\TableGateway\TableGateway;
 
+use Contato\View\Helper\FilterContato;
+
 class Module
 {
     /**
@@ -50,6 +52,9 @@ class Module
                 'message' => function($sm) {
                     return new View\Helper\Message($sm->getServiceLocator()->get('ControllerPluginManager')->get('flashmessenger'));
                 },
+            ),
+            'invokables' => array(
+                'filter' => 'Contato\View\Helper\ContatoFilter'
             )
         );
     }
@@ -76,7 +81,7 @@ class Module
                     // return instacia Model ContatoTable
                     return new ContatoTable($sm->get('ContatoTableGateway'));
                 }
-            )
+            ),
         );
     }
 }
