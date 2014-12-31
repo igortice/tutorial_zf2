@@ -1,4 +1,5 @@
 <?php
+
 /**
  * namespace para nosso modulo contato
  */
@@ -12,10 +13,9 @@ use Contato\Model\Contato,
 use Zend\Db\ResultSet\ResultSet,
     Zend\Db\TableGateway\TableGateway;
 
-use Contato\View\Helper\FilterContato;
-
 class Module
 {
+
     /**
      * include de arquivo para outras configuracoes desse modulo
      */
@@ -37,7 +37,7 @@ class Module
             ),
         );
     }
-    
+
     /**
      * Register View Helper
      */
@@ -46,7 +46,7 @@ class Module
         return array(
             # registrar View Helper com injecao de dependecia
             'factories' => array(
-                'menuAtivo'  => function($sm) {
+                'menuAtivo' => function($sm) {
                     return new View\Helper\MenuAtivo($sm->getServiceLocator()->get('Request'));
                 },
                 'message' => function($sm) {
@@ -58,7 +58,21 @@ class Module
             )
         );
     }
-    
+
+    /**
+     * Register Controller Plugin
+     */
+    public function getControllerPluginConfig()
+    {
+        return array(
+            'factories' => array(
+                'cache' => function($sm) {
+                    return new Controller\Plugin\Cache($sm->getServiceLocator()->get('Cache\FileSystem'));
+                },
+            ),
+        );
+    }
+
     /**
      * Register Services
      */
@@ -80,8 +94,9 @@ class Module
                 'ModelContato' => function ($sm) {
                     // return instacia Model ContatoTable
                     return new ContatoTable($sm->get('ContatoTableGateway'));
-                }
+                },
             ),
         );
     }
+
 }

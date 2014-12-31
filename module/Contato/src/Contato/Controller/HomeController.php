@@ -11,7 +11,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 // import Zend\Db
-use Zend\Db\Adapter\Adapter as Adaptador,
+use Zend\Db\Adapter\Adapter,
     Zend\Db\Sql\Sql;
 
 class HomeController extends AbstractActionController
@@ -21,7 +21,7 @@ class HomeController extends AbstractActionController
     * @return \Zend\View\Model\ViewModel
     */
     public function indexAction()
-    {
+    {   
         /**
          * função anônima para var_dump estilizado
          */
@@ -30,6 +30,22 @@ class HomeController extends AbstractActionController
                     var_dump($data);
                     echo '</pre>' . str_repeat($caracter, 100) . '<br/><br/>';
                 };
+                
+        
+        /**
+         * Uso de cache
+         */
+        if (!$this->cache()->hasItem('nome')) {
+            $myVarDump(
+                "Registro de Cache Agora", 
+                $this->cache()->setItem('nome', 'igor')
+            );
+        } else {
+            $myVarDump(
+                "Cache Existente", 
+                $this->cache()->getItem('nome')
+            );   
+        }
 
         /**
          * conexão com banco
