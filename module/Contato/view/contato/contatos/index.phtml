@@ -39,7 +39,7 @@
                     <td class="text-center"><?php echo $this->filter($contato)->quantidadeTelefones(); ?></td>
                     <td><?php echo $this->filter($contato)->dataCriacao(); ?></td>
                     <td>
-                        <a class="btn btn-xs btn-info" title="Visualizar" href="<?php echo $this->url('contatos', array("action" => "detalhes", "id" => $contato->id,)); ?>"><span class="glyphicon glyphicon-new-window"></span></a>
+                        <button class="btn btn-xs btn-info" data-toggle="modal" data-target="#modal-detalhes-contato" data-contato-url="<?php echo $this->url('contatos', array("action" => "detalhes", "id" => $contato->id)); ?>" title="Visualizar" ><span class="glyphicon glyphicon-new-window"></span></button>
                         <a class="btn btn-xs btn-warning" title="Editar" href="<?php echo $this->url('contatos', array("action" => "editar", "id" => $contato->id,)); ?>"><span class="glyphicon glyphicon-edit"></span></a>
                         <a class="btn btn-xs btn-danger" title="Deletar" href="<?php echo $this->url('contatos', array("action" => "deletar", "id" => $contato->id,)); ?>"><span class="glyphicon glyphicon-floppy-remove"></span></a>
                     </td>
@@ -64,6 +64,17 @@
         ['route' => 'contatos']
     );
     ?>
+    
+    <div class="modal fade" id="modal-detalhes-contato">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Corpo Modal Detalhes Contato
+                </div>
+              </div>
+        </div>
+    </div>
+
 </div>
 
 <?php $this->headScript()->captureStart(); ?>
@@ -85,5 +96,18 @@ $(function(){
             // elimar o evendo do botão clicado
             event.preventDefault();
     });
+});
+
+$(function(){
+    $('#modal-detalhes-contato').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)             // Button that triggered the modal
+        var contato_url = button.data('contato-url')    // Extract info from data-* attributes
+        
+        var modal = $(this)
+        modal.
+            find('.modal-body').        // localizar corpo modal
+            html('Carregando...').      // colocar html caso a requição demore
+            load(contato_url)           // inserir conteudo html AJAX
+    })
 });
 <?php $this->headScript()->captureEnd(); ?>

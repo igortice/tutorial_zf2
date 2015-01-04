@@ -132,9 +132,12 @@ class ContatosController extends AbstractActionController
             // redirecionar para action index
             return $this->redirect()->toRoute('contatos');
         }
-
+        
         // dados eviados para detalhes.phtml
-        return ['contato' => $contato];
+        return (new ViewModel())
+                ->setTerminal($this->getRequest()->isXmlHttpRequest())
+                ->setVariable('contato', $contato)
+        ;
     }
 
     // GET /contatos/editar/id
